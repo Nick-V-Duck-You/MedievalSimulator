@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float _gravity = -14f;
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] public float _speed = 5f;
     [SerializeField] private float _speedRun = 10f;
 
     [Range(1, 100)]

@@ -9,6 +9,8 @@ public class FollowerController : MonoBehaviour
     NavMeshAgent agent;
     [SerializeField] private PlayerController playerController;
 
+    [SerializeField] private FollowerStats stats;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,11 @@ public class FollowerController : MonoBehaviour
     void Update()
     {
         //Follow the player with player speed
-        agent.destination = transformToFollow.position;
-        agent.speed = playerController._speed;
+        if (stats.isRecruited)
+        {
+            agent.destination = transformToFollow.position;
+            agent.speed = playerController._speed;
+        }
+        
     }
 }

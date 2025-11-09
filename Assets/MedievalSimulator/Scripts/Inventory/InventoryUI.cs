@@ -1,53 +1,32 @@
-using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 
+// Класс для обновления UI инвентаря
 public class InventoryUI : MonoBehaviour
 {
-    [SerializeField] Inventory TargetInventory;
-    [SerializeField] RectTransform itemsPanel;
+    public Transform itemsParent; // Родитель слотов
+    public Inventory inventory;
 
-    readonly List<GameObject> drawnIcons = new List<GameObject>();
+    public InventorySlot[] slots; // Массив слотов
 
     void Start()
     {
-        TargetInventory.onItemAdded += OnItemAdded;
-        TargetInventory.onItemRemoved -= OnItemRemoved;
-        Redraw();
+        inventory.onItemChangedCallback += UpdateUI; // Подписываемся на изменения инвентаря
+        slots = itemsParent.GetComponentsInChildren<InventorySlot>(); // Получаем все слоты
     }
 
-    void OnItemAdded(Item obj) => Redraw();
-    void OnItemRemoved(Item obj) => Redraw();
-
-
-    // Update is called once per frame
-    void Update()
+    // Метод для обновления интерфейса
+    void UpdateUI()
     {
-
-    }
-    void Redraw()
-    {
-        ClearDrawn();
-        
-        for (var i = 0; i < TargetInventory.inventoryItems.Count; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            var item = TargetInventory.inventoryItems[i];
-            var icon = new GameObject("Icon");
-            icon.AddComponent<Image>().sprite = item.Icon;
-            icon.transform.SetParent(itemsPanel);
-
-            drawnIcons.Add(icon);
+            if (i < inventory.items.Count)
+            {
+                slots[i].AddItem(inventory.items[i]); // Заполняем слот
+            }
+            else
+            {
+                slots[i].ClearSlot(); // Очищаем слот
+            }
         }
-    }
-
-    void ClearDrawn()
-    {
-        for (var i = 0;i < drawnIcons.Count; i++)
-        {
-            Destroy(drawnIcons[i]);
-        }
-        drawnIcons.Clear();
     }
 }

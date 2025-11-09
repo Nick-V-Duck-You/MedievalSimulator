@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815ef86376a9aa64cbc77d08a9c469ae, type: 3}
   m_Name: Champain
   m_EditorClassIdentifier: 
-  Name: Champain
-  Icon: {fileID: 21300000, guid: d4d5a29cfab88f2458592d8914f573a9, type: 3}
-  price: 100
+  itemName: Champain
+  icon: {fileID: 21300000, guid: d4d5a29cfab88f2458592d8914f573a9, type: 3}
+  isStackable: 0

@@ -8,8 +8,8 @@ public class ItemTaker : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.E))
-            targetInventory.AddItem(itemToAdd);
+            targetInventory.Add(itemToAdd);
         if (Input.GetKeyUp(KeyCode.R))
-            targetInventory.RemoveItem(itemToAdd);
+            targetInventory.Remove(itemToAdd);
     }
 }

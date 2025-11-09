@@ -1,43 +1,46 @@
-using NUnit.Framework;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-
+// Класс инвентаря для управления предметами
 public class Inventory : MonoBehaviour
 {
-    public Action<Item> onItemAdded;
-    public Action<Item> onItemRemoved;
+    public static Inventory instance; // Синглтон для удобного доступа
 
-    [FormerlySerializedAs ("StartItems")] [SerializeField] public List<Item> StartItems = new List<Item>();
-
-    public List<Item> inventoryItems { get; set; }
-    
-
-    void Awake()
+    private void Awake()
     {
-        inventoryItems = new List<Item>();
-        for (var i = 0; i < StartItems.Count; i++) 
+        if (instance != null)
         {
-            AddItem(StartItems[i]);
-        
+            Debug.LogWarning("Inventory уже существует!");
+            return;
+        }
+        instance = this;
+    }
+
+    public List<Item> items = new List<Item>(); // Список предметов в инвентаре
+    public int space = 20; // Максимальное количество предметов
+
+    // Делегат для уведомления об изменениях в инвентаре
+    public delegate void OnItemChanged();
+    public OnItemChanged onItemChangedCallback;
+
+    // Метод для добавления предмета
+    public bool Add(Item item)
+    {
+        if (items.Count >= space)
+        {
+            Debug.Log("Нет места в инвентаре!");
+            return false;
         }
 
+        items.Add(item);
+        onItemChangedCallback?.Invoke(); // Уведомляем об изменениях
+        return true;
     }
 
-
-    public void AddItem(Item item)
+    // Метод для удаления предмета
+    public void Remove(Item item)
     {
-        inventoryItems.Add(item);
-
-        onItemAdded?.Invoke(item);
-    }
-    public void RemoveItem(Item item)
-    {
-        inventoryItems.Remove(item);
-
-        onItemAdded?.Invoke(item);
+        items.Remove(item);
+        onItemChangedCallback?.Invoke(); // Уведомляем об изменениях
     }
 }

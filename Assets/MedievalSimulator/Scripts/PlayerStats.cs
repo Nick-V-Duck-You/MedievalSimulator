@@ -28,7 +28,7 @@ public class PlayerStats : MonoBehaviour
     ///<param name ="stat"> Stat name </param>
     ///<param name ="value"> Value to change </param>
 
-    public void ChangeStatValue(string stat, float value)
+    /*public void ChangeStatValue(string stat, float value)
     {
         switch (stat)
         {
@@ -52,5 +52,5 @@ public class PlayerStats : MonoBehaviour
                 break;
         }
         
-    } 
+    } */
 }

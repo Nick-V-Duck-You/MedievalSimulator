@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815ef86376a9aa64cbc77d08a9c469ae, type: 3}
   m_Name: Banana
   m_EditorClassIdentifier: 
-  Name: Banana
-  Icon: {fileID: 21300000, guid: 82261b781dce9614fae0cad9640bb9a4, type: 3}
-  price: 20
+  itemName: Banana
+  icon: {fileID: 21300000, guid: 82261b781dce9614fae0cad9640bb9a4, type: 3}
+  isStackable: 0

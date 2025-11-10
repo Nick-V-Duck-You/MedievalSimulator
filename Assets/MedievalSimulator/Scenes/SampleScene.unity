@@ -303,7 +303,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.022000002, y: 0.753}
   m_AnchorMax: {x: 0.149, y: 0.8366006}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
   m_SizeDelta: {x: -0.11829996, y: -76.12399}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &250986035
@@ -824,7 +824,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.022000002, y: 0.63420117}
   m_AnchorMax: {x: 0.149, y: 0.7178003}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0.30000305}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0.30000305}
   m_SizeDelta: {x: -0.11829996, y: -76.12399}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &805841743
@@ -1404,8 +1404,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsParent: {fileID: 1229797781}
+  slotPrefab: {fileID: 1123294437587331564, guid: 8488fb24d1c4d0847900ab64ed5d1069, type: 3}
   inventory: {fileID: 1459068850}
-  slots: []
 --- !u!114 &1229797783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1654,9 +1654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241d6fa3a41f072409326ddfefdac0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 11400000, guid: 8209762a3bc8f9c4698f9126fa850faf, type: 2}
-  - {fileID: 11400000, guid: a979bc9980851c84c964090f07a72580, type: 2}
+  items: []
   space: 20
 --- !u!114 &1459068854
 MonoBehaviour:
@@ -1801,7 +1799,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.0144811105, y: 0.8906557}
   m_AnchorMax: {x: 0.16983965, y: 0.93100005}
-  m_AnchoredPosition: {x: 0.13079834, y: 0.42460632}
+  m_AnchoredPosition: {x: 0.1307373, y: 0.42462158}
   m_SizeDelta: {x: -0.25699997, y: -48.995003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1924635996
@@ -2003,6 +2001,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 14449684348864816, guid: 75ed43f393a68c246be5942e3c3bb58a, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 14449684348864816, guid: 75ed43f393a68c246be5942e3c3bb58a, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 1331531374165107246, guid: 75ed43f393a68c246be5942e3c3bb58a, type: 3}

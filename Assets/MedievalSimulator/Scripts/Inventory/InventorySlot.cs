@@ -15,7 +15,7 @@ public class InventorySlot : MonoBehaviour
         item = newItem;
         icon.sprite = item.icon;
         icon.enabled = true;
-        removeButton.interactable = true;
+        if (removeButton) removeButton.interactable = true;
     }
 
     // Метод для очистки слота
@@ -24,13 +24,13 @@ public class InventorySlot : MonoBehaviour
         item = null;
         icon.sprite = null;
         icon.enabled = false;
-        removeButton.interactable = false;
+        if (removeButton) removeButton.interactable = false;
     }
 
     // Метод для удаления предмета по нажатию кнопки
     public void OnRemoveButton()
     {
-        Inventory.instance.Remove(item);
+        if (item != null) Inventory.instance.Remove(item);
     }
 
     // Метод для использования предмета

@@ -8,9 +8,10 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-        if (instance != null)
+        if (instance != null && instance != this)
         {
             Debug.LogWarning("Inventory уже существует!");
+            Destroy(gameObject);
             return;
         }
         instance = this;

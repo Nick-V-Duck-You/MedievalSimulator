@@ -1,0 +1,42 @@
+﻿{
+  "Dialogue1": [
+    {
+      "id": 0,
+      "Character": "Дворецкий",
+      "Line": "Ваше величество, родился мальчик",
+      "audioClip": "MedievalSimulator/Resources/Audio/Dialogues/Dialogue1_0.wav"
+    },
+    {
+      "id": 1,
+      "Character": "Король",
+      "Line": "Напоите наследника чаем!",
+      "audioClip": "MedievalSimulator/Resources/Audio/Dialogues/Dialogue1_1.wav"
+    },
+    {
+      "id": 2,
+      "Character": "Дворецкий",
+      "Line": "Но он же еще маленький",
+      "audioClip": "MedievalSimulator/Resources/Audio/Dialogues/Dialogue1_2.wav"
+    },
+    {
+      "id": 3,
+      "Character": "Король",
+      "Line": "А, хуй с ним!",
+      "audioClip": "MedievalSimulator/Resources/Audio/Dialogues/Dialogue1_3.wav"
+    }
+  ],
+  "Dialogue2": [
+    {
+      "id": 0,
+      "Character": "Лосяш",
+      "Line": "Он не бесполезный...",
+      "audioClip": "MedievalSimulator/Resources/Audio/Dialogues/Dialogue2_0.wav"
+    },
+    {
+      "id": 1,
+      "Character": "Лосяш",
+      "Line": "... Он ночью светится!",
+      "audioClip": "MedievalSimulator/Resources/Audio/Dialogues/Dialogue2_1.wav"
+    }
+  ]
+}

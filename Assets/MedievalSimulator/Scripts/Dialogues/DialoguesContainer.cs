@@ -6,5 +6,5 @@ using UnityEngine;
 public class DialoguesContainer
 {
     public List<DialogueLinesData> Dialogue1;
-    public List<DialogueLinesData> dialogue2;
+    public List<DialogueLinesData> Dialogue2;
 }

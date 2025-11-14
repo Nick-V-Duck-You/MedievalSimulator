@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class JsonParser : MonoBehaviour
@@ -21,10 +20,15 @@ public class JsonParser : MonoBehaviour
 
     }
 
-    public void LineFiller()
+    public void LineFiller(string dialogueName)
     {
-        //создаем объект класса DialogueLinesData (реплика короче) и запихиваем в него информацию из контейнера Диалог 1 реплики с индексом 0
-        currentLine = _dialogueDatabase.Dialogue1 [currentLineID];
+        // Используем переданное имя диалога (dialogueName) вместо внутреннего поля
+        List<DialogueLinesData> targetList = (List<DialogueLinesData>)typeof(DialoguesContainer)
+            .GetField(dialogueName)
+            .GetValue(_dialogueDatabase);
+
+        //создаем объект класса DialogueLinesData (реплика короче) и запихиваем в него информацию из контейнера Диалогов с именем targetList с индексом currentLineID
+        currentLine = targetList[currentLineID];
     }
 
 }

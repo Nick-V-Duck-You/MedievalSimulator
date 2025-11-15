@@ -12,4 +12,9 @@ public class ItemTaker : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.R))
             targetInventory.Remove(itemToAdd);
     }
+
+    public void Remove()
+    {
+        targetInventory.Remove(itemToAdd);
+    }
 }

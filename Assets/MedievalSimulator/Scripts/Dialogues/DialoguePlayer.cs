@@ -19,6 +19,13 @@ public class DialoguePlayer : MonoBehaviour
 
     public bool isDialoguePlayed;
     public bool isDialogueStarted;
+
+    [Header("Actions after the dialogue ends")]
+    [SerializeField] public bool isDestroyRecuired;
+    [SerializeField] public bool isSpecialActionRecuired;
+    [SerializeField] public GameObject GameObjectWithSpecialAction;
+
+
     //public bool isDialogueStarted;
 
     public int lineNumberFmod;
@@ -86,7 +93,7 @@ public class DialoguePlayer : MonoBehaviour
                 JsonParser.currentLineID = 0;
                 DialogueUI.SetActive(false);
                 isDialoguePlayed = true;
-                Destroy(gameObject);
+                EndDialogue();
             }
         }
     }
@@ -103,5 +110,17 @@ public class DialoguePlayer : MonoBehaviour
             _fmodInstance.setParameterByName("Dialogue Name", 0f);
         }
         
+    }
+
+    public void EndDialogue()
+    {
+        if (isDestroyRecuired)
+        {
+            Destroy(gameObject);
+        }
+        if (isSpecialActionRecuired)
+        {
+            GameObjectWithSpecialAction.GetComponent<SpecialAction>().Action();
+        }
     }
 }

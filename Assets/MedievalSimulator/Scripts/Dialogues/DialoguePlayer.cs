@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class DialoguePlayer : MonoBehaviour
 {
@@ -14,6 +13,7 @@ public class DialoguePlayer : MonoBehaviour
 
     public GameObject triggerObject; // Assign this in the Inspector
     public GameObject Player; // Assign this in the Inspector
+    private static PlayerController playerController;
 
     public float distance;
 
@@ -32,16 +32,33 @@ public class DialoguePlayer : MonoBehaviour
 
     public JsonParser JsonParser;
 
-    private FMOD.Studio.EventInstance _fmodInstance;
+    private FMODUnity.StudioEventEmitter _emitter;
 
     public enum DialogueName
     {
         D_kuplinov,
         D_Losyash
     }
-    public string imya = "D_kuplinov";
 
     [SerializeField] public DialogueName dialogueNameFmod;
+
+    private void Awake()
+    {
+        // поиск PlayerController по тегу (это нужно, чтобы находить управление гг и  останваливать/возобнавляеть его работу при диалоге)
+        if (playerController == null)
+        {
+            var playerGO = GameObject.FindGameObjectWithTag("Player");
+            if (playerGO != null)
+                playerController = playerGO.GetComponent<PlayerController>();
+            else
+                Debug.LogError("DialoguePlayer: не найден объект с тегом Player");
+        }
+
+        // кешируем FMOD эмиттер
+        _emitter = GetComponent<FMODUnity.StudioEventEmitter>();
+        if (_emitter == null)
+            Debug.LogError("DialoguePlayer: нет StudioEventEmitter на объекте");
+    }
 
     void Start()
     {
@@ -55,44 +72,66 @@ public class DialoguePlayer : MonoBehaviour
     void Update()
     {
         distance = Vector3.Distance(triggerObject.transform.position, Player.transform.position);
-        if (distance < 5f){
 
-
-            JsonParser.LineFiller(DialogueKey);// НАДО ИСПРАВИТЬ МНЕ НЕ НРАВИТСЯ ЧТО ОНО ВЫЗЫВАЕТСЯ 60 РАЗ В СЕКУНДУ
+        // ---- СТАРТ ДИАЛОГА ОДИН РАЗ ПО ENTER ----
+        if (distance < 5f && !isDialogueStarted && !isDialoguePlayed && Input.GetKeyDown(KeyCode.Return))
+        {
+            // грузим первую строку и ставим параметры FMOD и играем первую реплику
+            JsonParser.LineFiller(DialogueKey);
             PlayDialogue();
 
-            if (!isDialogueStarted) 
-            { 
-                this.GetComponent<FMODUnity.StudioEventEmitter>().SetParameter("line number", lineNumberFmod);
-                this.GetComponent<FMODUnity.StudioEventEmitter>().Play();
-                isDialogueStarted = true;
+            // ставим параметры FMOD и играем первую реплику
+            if (_emitter != null)
+            {
+                _emitter.SetParameter("Dialogue Name", (float)dialogueNameFmod);
+                _emitter.SetParameter("line number", lineNumberFmod);
+                _emitter.Play();
             }
 
+            isDialogueStarted = true;
+            return;
 
+        }
 
-            /* typeof возвращает тип для DialoguesContainer
-            .GetField(TargetDialogueName) ищет внутри DialoguesContainer то, что является значением TargetDialogueName (дает ебучий указатель)
-            .GetValue() достает по указателю содержимое типа object
-            (List<DialogueLinesData>) преобразует в тип List<DialogueLinesData>
-            */
-            List<DialogueLinesData> currentDialogueList = (List<DialogueLinesData>)typeof(DialoguesContainer) 
-                .GetField(DialogueKey)
-                .GetValue(JsonParser._dialogueDatabase);
+        if (!isDialogueStarted || isDialoguePlayed || !DialogueUI.activeSelf)
+            return;
 
-            if ((Input.GetKeyDown(KeyCode.Return)) & (JsonParser.currentLineID < currentDialogueList.Count - 1))
+        // ---- ПРОЛИСТЫВАНИЕ РЕПЛИК ПО ENTER ----
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            List<DialogueLinesData> currentDialogueList =
+                (List<DialogueLinesData>)typeof(DialoguesContainer)
+                    .GetField(DialogueKey)
+                    .GetValue(JsonParser._dialogueDatabase);
+
+            // не последняя строка - перелистываем дальше
+            if (JsonParser.currentLineID < currentDialogueList.Count - 1)
             {
-                Debug.Log("Keypad Enter key pressed!");
+                Debug.Log($"Enter pressed, switching to next dialogue line (ID: {JsonParser.currentLineID}).");
                 JsonParser.currentLineID += 1;
                 lineNumberFmod += 1;
-                this.GetComponent<FMODUnity.StudioEventEmitter>().SetParameter("line number", lineNumberFmod);
-                this.GetComponent<FMODUnity.StudioEventEmitter>().Play();
+
+                // обновляем текст из JSON
+                JsonParser.LineFiller(DialogueKey);
+                NameUI.text = JsonParser.currentLine.Character;
+                LineUI.text = JsonParser.currentLine.Line;
+
+                // обновляем звук
+                if (_emitter != null)
+                {
+                    _emitter.SetParameter("line number", lineNumberFmod);
+                    _emitter.Play();
+                }
             }
-            else if ((Input.GetKeyDown(KeyCode.Return)) & (JsonParser.currentLineID == currentDialogueList.Count - 1))
+
+            // последняя строка - закрываем диалог
+            else
             {
                 Debug.Log("Keypad Enter key pressed! DialogueUI was closed");
                 JsonParser.currentLineID = 0;
-                DialogueUI.SetActive(false);
                 isDialoguePlayed = true;
+                isDialogueStarted = false;
+                DialogueUI.SetActive(false);
                 EndDialogue();
             }
         }
@@ -102,18 +141,43 @@ public class DialoguePlayer : MonoBehaviour
     {
         if (!isDialoguePlayed)
         {
+            // включаем видимость курсора 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            // Останавливаем время
+            Time.timeScale = 0f;
+
+            // Отключаем управление персонажем
+            if (playerController != null)
+                playerController.SetActive(false);
+
             DialogueUI.SetActive(true);
             //вытаскиваем из реплики по ключам имя персонажа и реплику
             NameUI.text = JsonParser.currentLine.Character;
             LineUI.text = JsonParser.currentLine.Line;
-            // А НЕ РАБОТАЕТ ОНО БЛЯТЬ))))) ни енам, ни флоат, ни строки
-            _fmodInstance.setParameterByName("Dialogue Name", 0f);
+
+            if (_emitter != null)
+            {
+                _emitter.SetParameter("Dialogue Name", (float)dialogueNameFmod);
+            }
         }
         
     }
 
     public void EndDialogue()
     {
+        // Возвращаем игровой режим
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Возвращаем время
+        Time.timeScale = 1f;
+
+        // Включаем управление персонажем
+        if (playerController != null)
+            playerController.SetActive(true);
+
         if (isDestroyRecuired)
         {
             Destroy(gameObject);

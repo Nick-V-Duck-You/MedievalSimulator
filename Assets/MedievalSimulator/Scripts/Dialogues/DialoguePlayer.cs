@@ -18,12 +18,38 @@ public class DialoguePlayer : MonoBehaviour
     public float distance;
 
     public bool isDialoguePlayed;
+    public bool isDialogueStarted;
+
+    [Header("Actions after the dialogue ends")]
+    [SerializeField] public bool isDestroyRecuired;
+    [SerializeField] public bool isSpecialActionRecuired;
+    [SerializeField] public GameObject GameObjectWithSpecialAction;
+
+
+    //public bool isDialogueStarted;
+
+    public int lineNumberFmod;
 
     public JsonParser JsonParser;
+
+    private FMOD.Studio.EventInstance _fmodInstance;
+
+    public enum DialogueName
+    {
+        D_kuplinov,
+        D_Losyash
+    }
+    public string imya = "D_kuplinov";
+
+    [SerializeField] public DialogueName dialogueNameFmod;
+
     void Start()
     {
         DialogueUI.SetActive(false);
         isDialoguePlayed = false;
+        isDialogueStarted = false;
+        lineNumberFmod = 1; // ЕСЛИ ОЗВУЧКА РАБОТАЕТ ЧЕРЕЗ ЖОПУ СПРОСИТЬ У КРОША НЕ ИСПРАВЛЕНЫ ЛИ ИНДЕКСЫ ДИАЛОГОВ И ПОМЕНЯТЬ ЗНАЧЕНИЕ НА 0
+       
     }
 
     void Update()
@@ -31,8 +57,18 @@ public class DialoguePlayer : MonoBehaviour
         distance = Vector3.Distance(triggerObject.transform.position, Player.transform.position);
         if (distance < 5f){
 
+
             JsonParser.LineFiller(DialogueKey);// НАДО ИСПРАВИТЬ МНЕ НЕ НРАВИТСЯ ЧТО ОНО ВЫЗЫВАЕТСЯ 60 РАЗ В СЕКУНДУ
             PlayDialogue();
+
+            if (!isDialogueStarted) 
+            { 
+                this.GetComponent<FMODUnity.StudioEventEmitter>().SetParameter("line number", lineNumberFmod);
+                this.GetComponent<FMODUnity.StudioEventEmitter>().Play();
+                isDialogueStarted = true;
+            }
+
+
 
             /* typeof возвращает тип для DialoguesContainer
             .GetField(TargetDialogueName) ищет внутри DialoguesContainer то, что является значением TargetDialogueName (дает ебучий указатель)
@@ -47,6 +83,9 @@ public class DialoguePlayer : MonoBehaviour
             {
                 Debug.Log("Keypad Enter key pressed!");
                 JsonParser.currentLineID += 1;
+                lineNumberFmod += 1;
+                this.GetComponent<FMODUnity.StudioEventEmitter>().SetParameter("line number", lineNumberFmod);
+                this.GetComponent<FMODUnity.StudioEventEmitter>().Play();
             }
             else if ((Input.GetKeyDown(KeyCode.Return)) & (JsonParser.currentLineID == currentDialogueList.Count - 1))
             {
@@ -54,7 +93,7 @@ public class DialoguePlayer : MonoBehaviour
                 JsonParser.currentLineID = 0;
                 DialogueUI.SetActive(false);
                 isDialoguePlayed = true;
-                Destroy(gameObject);
+                EndDialogue();
             }
         }
     }
@@ -67,7 +106,21 @@ public class DialoguePlayer : MonoBehaviour
             //вытаскиваем из реплики по ключам имя персонажа и реплику
             NameUI.text = JsonParser.currentLine.Character;
             LineUI.text = JsonParser.currentLine.Line;
+            // А НЕ РАБОТАЕТ ОНО БЛЯТЬ))))) ни енам, ни флоат, ни строки
+            _fmodInstance.setParameterByName("Dialogue Name", 0f);
         }
         
+    }
+
+    public void EndDialogue()
+    {
+        if (isDestroyRecuired)
+        {
+            Destroy(gameObject);
+        }
+        if (isSpecialActionRecuired)
+        {
+            GameObjectWithSpecialAction.GetComponent<SpecialAction>().Action();
+        }
     }
 }

@@ -38,6 +38,8 @@ public class InventorySlot : MonoBehaviour
     {
         if (item != null)
         {
+            GameObject.FindWithTag("Player").GetComponent<ItemTaker>().itemToRemove = item;
+            GameObject.Find("UIPanelsManager").GetComponent<InventoryUI>().InventorySlotToRemove = this.gameObject;
             item.Use(); // Âûחûגאול הויסעגטו ןנוהלועא
         }
     }

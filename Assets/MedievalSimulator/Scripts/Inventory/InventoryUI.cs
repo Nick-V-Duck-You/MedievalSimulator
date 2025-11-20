@@ -14,6 +14,7 @@ public class InventoryUI : MonoBehaviour
     public Transform itemsParent;
     public GameObject slotPrefab;
     public Inventory inventory;
+    public GameObject InventorySlotToRemove;
 
     private List<InventorySlot> slots = new List<InventorySlot>(); // Список слотов
     private bool inventoryOpen = false;
@@ -115,9 +116,9 @@ public class InventoryUI : MonoBehaviour
     {
         if (slots.Count == 0) return;
 
-        InventorySlot slot = slots[slots.Count - 1];
+        GameObject slot = InventorySlotToRemove;
         slots.RemoveAt(slots.Count - 1);
-        Destroy(slot.gameObject); // Удаляем сам объект из UI
+        Destroy(slot); // Удаляем сам объект из UI
         UpdateUI();
     }
 

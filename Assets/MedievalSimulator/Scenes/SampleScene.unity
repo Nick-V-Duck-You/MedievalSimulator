@@ -2815,6 +2815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemToAdd: {fileID: 11400000, guid: a979bc9980851c84c964090f07a72580, type: 2}
+  itemToRemove: {fileID: 11400000, guid: 8209762a3bc8f9c4698f9126fa850faf, type: 2}
   targetInventory: {fileID: 1459068850}
 --- !u!4 &1459068855 stripped
 Transform:

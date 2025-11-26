@@ -1,3 +1,5 @@
+using FMODUnity;
+using FMOD.Studio;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,13 +34,21 @@ public class DialoguePlayer : MonoBehaviour
 
     public JsonParser JsonParser;
 
-    private FMODUnity.StudioEventEmitter _emitter;
+    //private FMODUnity.StudioEventEmitter _emitter;
 
+    
+    [SerializeField] private FMODUnity.EventReference _FMD_NPC_Dialogue;
+    private FMOD.Studio.EventInstance _CharIsTalking;
+   
+    [SerializeField]
     public enum DialogueName
     {
         D_kuplinov,
         D_Losyash
     }
+
+    
+    
 
     [SerializeField] public DialogueName dialogueNameFmod;
 
@@ -54,10 +64,12 @@ public class DialoguePlayer : MonoBehaviour
                 Debug.LogError("DialoguePlayer: не найден объект с тегом Player");
         }
 
-        // кешируем FMOD эмиттер
+        // пока не вырезаю код с эммитером и оставляю как шаргалку, если никому не надо снесите, это хорошее решение для постоянных звуков на карте, для диалогов с параметрами лучше через инстансы, 
+        /* кешируем FMOD эмиттер
         _emitter = GetComponent<FMODUnity.StudioEventEmitter>();
         if (_emitter == null)
-            Debug.LogError("DialoguePlayer: нет StudioEventEmitter на объекте");
+        Debug.LogError("DialoguePlayer: нет StudioEventEmitter на объекте");
+        */
     }
 
     void Start()
@@ -65,7 +77,7 @@ public class DialoguePlayer : MonoBehaviour
         DialogueUI.SetActive(false);
         isDialoguePlayed = false;
         isDialogueStarted = false;
-        lineNumberFmod = 1; // ЕСЛИ ОЗВУЧКА РАБОТАЕТ ЧЕРЕЗ ЖОПУ СПРОСИТЬ У КРОША НЕ ИСПРАВЛЕНЫ ЛИ ИНДЕКСЫ ДИАЛОГОВ И ПОМЕНЯТЬ ЗНАЧЕНИЕ НА 0
+        lineNumberFmod = 0; // Крош починил, всё работает как задумано
        
     }
 
@@ -81,12 +93,28 @@ public class DialoguePlayer : MonoBehaviour
             PlayDialogue();
 
             // ставим параметры FMOD и играем первую реплику
-            if (_emitter != null)
-            {
-                _emitter.SetParameter("Dialogue Name", (float)dialogueNameFmod);
-                _emitter.SetParameter("line number", lineNumberFmod);
-                _emitter.Play();
-            }
+            /*/ if (_emitter != null)
+             {
+                 _emitter.SetParameter("Dialogue Name", (float)dialogueNameFmod);
+                 _emitter.SetParameter("Line Number", lineNumberFmod);
+                 _emitter.Play();
+             }
+             /*/
+            
+            _CharIsTalking = FMODUnity.RuntimeManager.CreateInstance(_FMD_NPC_Dialogue);
+
+            // почему эта хрень не работает большой вопрос, мб enum to string  как то надо присрать попробовать
+            //_CharIsTalking.setParameterByNameWithLabel("Dialogue Name", dialogueNameFmod);
+            
+
+            _CharIsTalking.start();
+            
+            //_CharIsTalking.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(_CharIsTalking,gameObject);
+
+
+            //Debug.LogError("DialoguePlayer: sound is");
+
 
             isDialogueStarted = true;
             return;
@@ -116,12 +144,20 @@ public class DialoguePlayer : MonoBehaviour
                 NameUI.text = JsonParser.currentLine.Character;
                 LineUI.text = JsonParser.currentLine.Line;
 
+                //_CharIsTalking.setParameterByNameWithLabel
+
+                _CharIsTalking.setParameterByName("Line Number", lineNumberFmod);
+                _CharIsTalking.start();
+               
+
                 // обновляем звук
+                /*
                 if (_emitter != null)
                 {
                     _emitter.SetParameter("line number", lineNumberFmod);
                     _emitter.Play();
                 }
+                */
             }
 
             // последняя строка - закрываем диалог
@@ -132,6 +168,7 @@ public class DialoguePlayer : MonoBehaviour
                 isDialoguePlayed = true;
                 isDialogueStarted = false;
                 DialogueUI.SetActive(false);
+                _CharIsTalking.release();
                 EndDialogue();
             }
         }
@@ -157,10 +194,12 @@ public class DialoguePlayer : MonoBehaviour
             NameUI.text = JsonParser.currentLine.Character;
             LineUI.text = JsonParser.currentLine.Line;
 
-            if (_emitter != null)
+            /*
+             if (_emitter != null)
             {
                 _emitter.SetParameter("Dialogue Name", (float)dialogueNameFmod);
             }
+            */
         }
         
     }

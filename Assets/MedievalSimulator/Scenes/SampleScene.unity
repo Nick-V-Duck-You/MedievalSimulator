@@ -1152,7 +1152,16 @@ MonoBehaviour:
   GameObjectWithSpecialAction: {fileID: 272633284}
   lineNumberFmod: 0
   JsonParser: {fileID: 1417367122}
-  dialogueNameFmod: 1
+  _FMD_NPC_Dialogue:
+    Guid:
+      Data1: 499357052
+      Data2: 1077442976
+      Data3: -61379409
+      Data4: 752693297
+    Path: event:/Testdialogue 1
+  _DialogueName:
+    Name: 
+    Value: 0
 --- !u!1 &378819435
 GameObject:
   m_ObjectHideFlags: 0
@@ -3608,12 +3617,21 @@ MonoBehaviour:
   distance: 0
   isDialoguePlayed: 0
   isDialogueStarted: 0
-  isDestroyRecuired: 1
+  isDestroyRecuired: 0
   isSpecialActionRecuired: 0
   GameObjectWithSpecialAction: {fileID: 0}
   lineNumberFmod: 0
   JsonParser: {fileID: 1417367122}
-  dialogueNameFmod: 0
+  _FMD_NPC_Dialogue:
+    Guid:
+      Data1: 499357052
+      Data2: 1077442976
+      Data3: -61379409
+      Data4: 752693297
+    Path: event:/Testdialogue 1
+  _DialogueName:
+    Name: 
+    Value: 0
 --- !u!65 &1924761582
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3662,9 +3680,7 @@ MonoBehaviour:
   TriggerOnce: 0
   Preload: 0
   NonRigidbodyVelocity: 0
-  Params:
-  - Name: Dialogue Name
-    Value: 1
+  Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20

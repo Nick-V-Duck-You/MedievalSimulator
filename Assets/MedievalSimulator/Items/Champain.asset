@@ -15,3 +15,6 @@ MonoBehaviour:
   itemName: Champain
   icon: {fileID: 21300000, guid: d4d5a29cfab88f2458592d8914f573a9, type: 3}
   isStackable: 0
+  isHealer: 1
+  isFood: 0
+  isDrink: 1

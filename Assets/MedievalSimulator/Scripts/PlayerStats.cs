@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using FMODUnity;
+using FMOD.Studio;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -20,7 +22,9 @@ public class PlayerStats : MonoBehaviour
     {
         hunger-= 1.0f/waitTime * Time.deltaTime;
         inebriation-= 1.0f/waitTime * Time.deltaTime;
+
     }
+    
 
     /// <summary>
     /// Changes player stat to the specified value, to decrease must use a negative value

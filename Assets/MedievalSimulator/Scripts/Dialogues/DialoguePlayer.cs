@@ -104,7 +104,7 @@ public class DialoguePlayer : MonoBehaviour
             _CharIsTalking = FMODUnity.RuntimeManager.CreateInstance(_FMD_NPC_Dialogue);
 
             // почему эта хрень не работает большой вопрос, мб enum to string  как то надо присрать попробовать
-            //_CharIsTalking.setParameterByNameWithLabel("Dialogue Name", dialogueNameFmod);
+            _CharIsTalking.setParameterByNameWithLabel("Dialogue Name", dialogueNameFmod.ToString());
             
 
             _CharIsTalking.start();

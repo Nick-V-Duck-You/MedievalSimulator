@@ -1080,7 +1080,6 @@ GameObject:
   - component: {fileID: 347073702}
   - component: {fileID: 347073705}
   - component: {fileID: 347073704}
-  - component: {fileID: 347073703}
   m_Layer: 0
   m_Name: DialogueTrigger (1)
   m_TagString: DialogueTrigger
@@ -1103,39 +1102,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &347073703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 347073701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  EventReference:
-    Guid:
-      Data1: 499357052
-      Data2: 1077442976
-      Data3: -61379409
-      Data4: 752693297
-    Path: event:/Testdialogue 1
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params:
-  - Name: Dialogue Name
-    Value: 0
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!65 &347073704
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1190,7 +1156,7 @@ MonoBehaviour:
       Data3: -61379409
       Data4: 752693297
     Path: event:/Testdialogue 1
-  dialogueNameFmod: 0
+  dialogueNameFmod: 1
 --- !u!1 &378819435
 GameObject:
   m_ObjectHideFlags: 0
@@ -3795,7 +3761,6 @@ GameObject:
   - component: {fileID: 1924761576}
   - component: {fileID: 1924761580}
   - component: {fileID: 1924761582}
-  - component: {fileID: 1924761583}
   m_Layer: 0
   m_Name: DialogueTrigger
   m_TagString: DialogueTrigger
@@ -3949,37 +3914,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.7595987, y: 2, z: 4.339588}
   m_Center: {x: -0.030230999, y: 0, z: -0.48045444}
---- !u!114 &1924761583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924761575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  EventReference:
-    Guid:
-      Data1: 499357052
-      Data2: 1077442976
-      Data3: -61379409
-      Data4: 752693297
-    Path: event:/Testdialogue 1
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &1976176472
 GameObject:
   m_ObjectHideFlags: 0

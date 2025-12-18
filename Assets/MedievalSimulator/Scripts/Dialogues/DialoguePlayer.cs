@@ -103,8 +103,12 @@ public class DialoguePlayer : MonoBehaviour
             
             _CharIsTalking = FMODUnity.RuntimeManager.CreateInstance(_FMD_NPC_Dialogue);
 
+            // Стало: Используйте RuntimeManager для установки глобальных параметров
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByNameWithLabel("Dialogue Name", dialogueNameFmod.ToString());
+
             // почему эта хрень не работает большой вопрос, мб enum to string  как то надо присрать попробовать
-            _CharIsTalking.setParameterByNameWithLabel("Dialogue Name", dialogueNameFmod.ToString());
+            // Не работает потому что пытаемся к локальной хуйне обращаться а нужно к глобальной
+            //_CharIsTalking.setParameterByNameWithLabel("Dialogue Name", dialogueNameFmod.ToString());
             
 
             _CharIsTalking.start();

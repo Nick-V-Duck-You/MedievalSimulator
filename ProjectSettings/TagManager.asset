@@ -8,6 +8,9 @@ TagManager:
   - UIManager
   - Waypoints
   - Ally
+  - Surf_Earth
+  - Surf_Stone
+  - Surf_Grass
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Enviroment
   - 
   - 
   - 

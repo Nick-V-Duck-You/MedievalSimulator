@@ -9,10 +9,16 @@ public class EnemyController : MonoBehaviour
 {
     //Transform that NPC has to follow
     public Transform target;
+    public Transform AttackTarget;
     //NavMesh Agent variable
     NavMeshAgent agent;
 
     public float distance;
+    public float CurrentAllyDistance;
+    public float? PreviousAllyDistance = null;
+
+
+    public List<GameObject> Allies;
 
     [SerializeField] private EnemyStats stats;
 
@@ -26,11 +32,31 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>(); //получаем навмеш
         StartCoroutine(MainBehaviourLoop()); //начинаем корутину MainBehaviourLoop
+        Allies = new List<GameObject>(GameObject.FindGameObjectsWithTag("Ally"));
+
     }
 
     void Update()
     {
-        distance = Vector3.Distance(this.gameObject.transform.position, GameObject.FindWithTag("Player").transform.position);//рассчитываем дистанцию между нпс и игроком
+        foreach (GameObject ally in Allies)
+        {
+            CurrentAllyDistance = Vector3.Distance(this.gameObject.transform.position, ally.transform.position);
+            if ((CurrentAllyDistance < PreviousAllyDistance) || (PreviousAllyDistance==null))
+            {
+                distance = Vector3.Distance(this.gameObject.transform.position, ally.transform.position);
+                AttackTarget = ally.transform;
+                PreviousAllyDistance = CurrentAllyDistance;
+            }
+            else
+            {
+                PreviousAllyDistance = CurrentAllyDistance;
+            }
+        }
+        if (distance > Vector3.Distance(this.gameObject.transform.position, GameObject.FindWithTag("Player").transform.position))
+        {
+            AttackTarget = GameObject.FindWithTag("Player").transform;
+            distance = Vector3.Distance(this.gameObject.transform.position, GameObject.FindWithTag("Player").transform.position); //рассчитываем дистанцию между нпс и игроком
+        }
     }
 
     IEnumerator MainBehaviourLoop()
@@ -65,7 +91,7 @@ public class EnemyController : MonoBehaviour
         State = "Chasing";
         agent.isStopped = false;
 
-        target = GameObject.FindWithTag("Player").transform;
+        target = AttackTarget;
 
         agent.destination = target.position;
         agent.speed = stats.speed;

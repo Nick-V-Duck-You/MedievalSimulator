@@ -7,7 +7,9 @@ public class PlayerStats : MonoBehaviour
 {
     public float HP = 74f;
     public float maxHP = 100f;
-    
+
+    public int playerDamage = 20;
+
     //variable denoting the time it takes for the indicator to decrease its value by 1f
     public float waitTime = 1.0f;
 

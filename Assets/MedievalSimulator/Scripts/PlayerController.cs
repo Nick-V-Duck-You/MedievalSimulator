@@ -31,16 +31,18 @@ public class PlayerController : MonoBehaviour
     public LayerMask SurfaceLayer;      // на каком слое проверяет тэг
     [SerializeField] public float fs_walk = 0.3f; //рекомедуемые значения для триггера шагов
     [SerializeField] private float fs_run = 0.2f;
-   //float fs_triggerrate;
+    public float fs_triggerrate;
 
     [SerializeField] private FMODUnity.EventReference Testsound;
     private EventInstance _StepInst; // это звуки для шагов 
+    private Coroutine stepRoutine;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _StepInst = FMODUnity.RuntimeManager.CreateInstance(Testsound); // это звуки для шагов 
+        fs_triggerrate = fs_walk;
     }
 
     void Update()
@@ -50,8 +52,6 @@ public class PlayerController : MonoBehaviour
 
         Rotate();
         Move();
-
-        
     }
 
     private void Rotate()
@@ -87,23 +87,23 @@ public class PlayerController : MonoBehaviour
 
         bool isMoving = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
 
+        fs_triggerrate = isRunning ? fs_run : fs_walk;
+
         if (characterController.isGrounded && isMoving)
         {
             SurfaceTagCheck();
-
-            if (!IsInvoking("PlayFM_Steps"))
+            if (stepRoutine == null)
             {
-                Debug.Log("Запуск InvokeRepeating в секунду: " + Time.time); // Добавьте эту строку
-                
-                InvokeRepeating("PlayFM_Steps", 0f, 0.3f);  // устанавливаем частоту воспроизведения шагов
+                stepRoutine = StartCoroutine(PlayStepsRoutine());
             }
         }
         else
         {
-            // Если мы не двигаемся или в воздухе, останавливаем повторение
-            if (IsInvoking("PlayFM_Steps"))
+            // Если мы не двигаемся или в воздухе, останавливаем корутину
+            if (stepRoutine != null)
             {
-                CancelInvoke("PlayFM_Steps"); // Останавливаем шаги
+                StopCoroutine(stepRoutine);
+                stepRoutine = null; // Сбрасываем ссылку, чтобы можно было запустить снова
                 _StepInst.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT); // это звуки для шагов 
             }
         }
@@ -128,9 +128,6 @@ public class PlayerController : MonoBehaviour
         isActive = active;
     }
 
-
-
-
     void SurfaceTagCheck() //селектор поверхности для шагов
     {
         if (Physics.Raycast(transform.position, Vector3.down, out RH_SurfaceTag, RH_Distance))
@@ -152,35 +149,32 @@ public class PlayerController : MonoBehaviour
                 SurfIndex = 0;
                  break;
             }
-        
+    }
 
+    private IEnumerator PlayStepsRoutine()
+    {
+        while (true)
+        {
+            //ждем интервал чтобы не играть звук сразу
+            yield return new WaitForSeconds(fs_triggerrate);
 
+            PlayFM_Steps();
+        }
     }
 
     void PlayFM_Steps() // играем шаги
     {
         //Debug.Log("Звук Growl вызван в секунду: " + Time.time); // Добавьте эту строку
-        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        bool isRunning = (fs_triggerrate == fs_run);
         EventInstance _StepInst = RuntimeManager.CreateInstance(Testsound);
 
-        //float fs_triggerrate = isRunning ? fs_walk : fs_run;
+        fs_triggerrate = isRunning ? fs_run : fs_walk;
 
-        if (isRunning == true) { 
-        _StepInst.setParameterByName("fmp_IsRunning", 1f, true);
+         _StepInst.setParameterByName("fmp_IsRunning", isRunning ? 1f : 0f, true);
+        _StepInst.setParameterByName("fmp_SurfIndex", SurfIndex, true);
 
-        }
-        else
-         {
-            _StepInst.setParameterByName("fmp_IsRunning", 0f, true);
-
-         }
-
-            _StepInst.setParameterByName("fmp_SurfIndex",SurfIndex,true);
         _StepInst.start();
         _StepInst.release();
-
-
-
 
     }
 }

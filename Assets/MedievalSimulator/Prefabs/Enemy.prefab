@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3996021136821592717}
   - component: {fileID: 8382880638810361987}
   - component: {fileID: 6637487406765377073}
+  - component: {fileID: 5143028975487435477}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -105,7 +106,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -123,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d8c75d5285193d4c9da38ce78cf9ba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
+  hp: 100
   speed: 3
   damage: 0
   waypoints:
@@ -143,7 +144,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  AttackTarget: {fileID: 0}
   distance: 0
+  CurrentAllyDistance: 0
+  Allies: []
   stats: {fileID: 3996021136821592717}
   isNeedWaiting: 1
   waitTime: 3
@@ -170,3 +174,15 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5143028975487435477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7860095765501033032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09d9cf197612b64eaa38e85b82579b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

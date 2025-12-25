@@ -20,7 +20,6 @@ public class Inventory : MonoBehaviour
     public List<Item> items = new List<Item>(); // Список предметов в инвентаре
     public int space = 20; // Максимальное количество предметов
 
-    // Делегат для уведомления об изменениях в инвентаре
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
 
@@ -38,10 +37,18 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    // Метод для удаления предмета
     public void Remove(Item item)
     {
         items.Remove(item);
         onItemChangedCallback?.Invoke(); // Уведомляем об изменениях
+    }
+
+    public void RemoveAt(int index)
+    {
+        if (index >= 0 && index < items.Count)
+        {
+            items.RemoveAt(index);
+            onItemChangedCallback?.Invoke(); // Уведомляем об изменениях
+        }
     }
 }

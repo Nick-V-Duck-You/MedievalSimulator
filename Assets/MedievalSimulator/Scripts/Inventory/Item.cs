@@ -10,18 +10,17 @@ public class Item : ScriptableObject
     public bool isFood;
     public bool isDrink;
 
-    private PlayerStats playerStats;
-
-    private PlayerStatsSounds sounds;
-    private PlayerStatsUI ui;
-
     // Метод, который может быть переопределен для уникальных действий с предметом
     public virtual void Use()
     {
-        playerStats = GameObject.FindWithTag("Player").GetComponent<PlayerStats>();
-        sounds = GameObject.FindWithTag("Player").GetComponent<PlayerStatsSounds>();
-        ui = GameObject.FindWithTag("UIManager").GetComponent<PlayerStatsUI>();
         Debug.Log($"Использован предмет: {itemName}");
+
+        PlayerStats playerStats = GameObject.FindWithTag("Player")?.GetComponent<PlayerStats>();
+        if (playerStats == null) return; 
+        
+        PlayerStatsSounds sounds = GameObject.FindWithTag("Player")?.GetComponent<PlayerStatsSounds>();
+        PlayerStatsUI ui = GameObject.FindWithTag("UIManager")?.GetComponent<PlayerStatsUI>();
+
         if (isDrink)
         {
             playerStats.inebriation += 10;
@@ -33,9 +32,9 @@ public class Item : ScriptableObject
         if (isHealer)
         {
             playerStats.HP += 10;
-            ui.HealthChange();
-            sounds.HealthChange();
+            if (ui != null) ui.HealthChange();
+            if (sounds != null) sounds.HealthChange();
         }
-        GameObject.FindWithTag("Player").GetComponent<ItemTaker>().Remove();
+
     }
 }
